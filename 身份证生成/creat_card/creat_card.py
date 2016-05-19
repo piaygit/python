@@ -21,3 +21,5 @@ for i in random_id:
     last_cardnumber=public_method.get_last_number(card)#得到最后一位校验位
     card=card+last_cardnumber
     print card
+cur.close()
+conn.close()
