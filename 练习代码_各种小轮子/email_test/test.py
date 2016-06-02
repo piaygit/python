@@ -11,10 +11,10 @@ def _format_addr(s):
     return formataddr((Header(name,'utf-8').encode(),addr.encode('utf-8')if isinstance(addr,unicode)
                       else addr))
 
-from_addr='luoyong@medlinker.com'
-password='Med123456'
+from_addr='1111'
+password='1111'
 smtp_server='smtp.qq.com'
-to_addr='luoyong@medlinker.com'
+to_addr='1111'
 msg = MIMEText('Python 邮件发送测试...', 'plain', 'utf-8')
 
 msg = MIMEText('hello, send by Python...', 'plain', 'utf-8')
