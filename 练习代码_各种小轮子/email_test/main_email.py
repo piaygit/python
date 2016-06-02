@@ -13,21 +13,19 @@ class main_email(object):
         self.send_mail=send_mail.send_mail()  # 发邮件
 
 
-    def sendmail(self):
-        to_addr1='luoyong@medlinker.com'
-        message=self.strcture_email.StrctureEmail()  # 邮件message
-        from_addr=self.from_email.FromEmail() #得到发件人邮件和密码的字典
+    def sendmail(self,file_path=None):
+        '''
+
+        :param file_path: 附件路径
+        :return:
+        '''
+        message=self.strcture_email.StrctureEmail(file_path)  # 构建邮件message
+        from_addr=self.from_email.FromEmail()  # 得到发件人邮件和密码的字典
         to_addr=self.read_mail.ReadMail()    # 得到一个收件人list
         message['From']=from_addr['from_addr']
-        message['To']=to_addr1
-        # self.send_mail.SendEmail(from_addr,list(to_addr),message.as_string())
-        server=smtplib.SMTP()
-        server.set_debuglevel(1)
-        server.connect('smtp.qq.com',25)
-        server.login(from_addr['from_addr'],from_addr['passwd'])
-        server.sendmail(from_addr['from_addr'],to_addr1,message.as_string())
-
-
+        # 必须加这句，分离收件人，不然会报错：'list' object has no attribute 'lstrip'
+        message['To']=','.join(to_addr)
+        self.send_mail.SendEmail(from_addr,to_addr,message.as_string()) #发送邮件
 
 
 
@@ -37,4 +35,4 @@ if __name__=='__main__':
     # 构造一个发送邮件实例
     send_email=main_email()
     # 调用邮件发送方法
-    send_email.sendmail()
+    send_email.sendmail(r'D:\python\email_test\email')

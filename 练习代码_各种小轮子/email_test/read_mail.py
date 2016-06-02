@@ -6,10 +6,14 @@ class read_mail(object):
 
 
     def ReadMail(self):
-        for line in open(r'E:\python\email_test\email'):
+        '''
+        读取一个文件中的邮箱，返回一个收件方列表
+        :return:
+        '''
+        for line in open(r'D:\python\email_test\email'):
             if line.strip() is not None and line  not in self.mail_list:
                 self.mail_list.append(str(line).strip())
-        print self.mail_list
+        # print self.mail_list
         return self.mail_list
 
 
