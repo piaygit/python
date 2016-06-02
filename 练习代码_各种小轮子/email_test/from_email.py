@@ -2,4 +2,13 @@
 __author__ = 'piay'
 
 class from_email(object):
-    pass
+
+
+    def FromEmail(self):
+
+        data={
+            'from_addr':'youremail',
+            'passwd':'yourpasswd'
+        }
+        return data
+
