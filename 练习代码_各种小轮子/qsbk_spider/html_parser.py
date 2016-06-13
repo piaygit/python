@@ -13,7 +13,7 @@ class html_parser(object):
     def __init__(self):
         self.data = []
 
-    def html_parser(self, url):
+    def HtmlParser(self, url):
         if url is not None:
             try:
                 page = requests.get(url)
@@ -40,7 +40,9 @@ class html_parser(object):
                     list_data.append(user_url)
                     list_data.append(qsbk_text)
                     self.data.append(list_data)  # 将每一组数据组成一个list添加到一个总的list中去
+                # print self.data
                 return self.data
+
             except requests.ConnectionError, e:
                 print '连接错误：%s', e
                 return 0  # 连接错误返回0
