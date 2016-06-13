@@ -1,15 +1,27 @@
 #-*- coding=utf-8 -*-
-import requests,sys
+import requests,sys,mysql
 from bs4 import BeautifulSoup
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 class html_parser(object):
 
+    def __init__(self):
+        self.dbconfig = {
+            'host': '127.0.0.1',
+            'port': 3306,
+            'user': 'root',
+            'passwd': '',
+            'db': 'spider',
+            'charset': 'utf8'
+        }
+        self.code=0
+        self.cur=mysql.mysql(conn_db=self.dbconfig)
 
 
     def get_data(self,url):
         page=requests.get(url)
+        self.code=page.status_code
         page.encoding='gbk'
         page=page.text.strip()
         soup=BeautifulSoup(page,'html5lib')
@@ -36,7 +48,8 @@ class html_parser(object):
                 date = data4.string
 
             if title is not None and name is not None:
-                print title,name,address,money,date
+                sql='insert into 51job (title,name,address,money,date) values ("%s","%s","%s","%s","%s")'%(title,name,address,money,date)
+                self.cur.insert(sql)
 
 
 
@@ -47,10 +60,9 @@ class html_parser(object):
 
 
 
-m=html_parser()
-for i in range(1,100):
-    url='http://search.51job.com/jobsearch/search_result.php?jobarea=090200%2C00&keyword=%E6%B5%8B%E8%AF%95&keywordtype=2&curr_page='+str(i)
-    try:
-        m.get_data(url)
-    except:
-        print '已经完成'
+# m=html_parser()
+# for i in range(1,100111):
+#     url='http://search.51job.com/jobsearch/search_result.php?jobarea=090200%2C00&keyword=%E6%B5%8B%E8%AF%95&keywordtype=2&curr_page='+str(i)
+#     m.get_data(url)
+#     if m.code!=200:
+#         break
