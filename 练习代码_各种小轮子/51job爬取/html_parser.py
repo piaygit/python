@@ -1,4 +1,6 @@
 #-*- coding=utf-8 -*-
+import re
+
 import requests,sys,mysql
 from bs4 import BeautifulSoup
 reload(sys)
@@ -15,16 +17,46 @@ class html_parser(object):
             'db': 'spider',
             'charset': 'utf8'
         }
-        self.code=0
+        # self.code=0
         self.cur=mysql.mysql(conn_db=self.dbconfig)
 
-
-    def get_data(self,url):
+    def get_next_page(self,url):
+        '''
+        取得下一页的链接
+        :param url: 当前的url
+        :return: 下一页的链接
+        '''
         page=requests.get(url)
-        self.code=page.status_code
+        # self.code=page.status_code
         page.encoding='gbk'
         page=page.text.strip()
         soup=BeautifulSoup(page,'html5lib')
+        #  下一页按钮的link
+        next_page=soup.find_all('li',attrs={'class':'bk'})
+        # 得到下一页的li标签,然后取出里面的a标签
+        try:
+            next_page=next_page[1].find_all('a')
+            next_page_url=next_page[0]['href']
+            return next_page_url
+        except:
+            # 如果最后一页了，next_page_url的值为NONE
+            next_page_url=None
+            return next_page_url
+
+
+
+    def get_data(self,url):
+        '''
+        得到招聘信息并写入数据库
+        :param url:
+        :return:
+        '''
+        page=requests.get(url)
+        # self.code=page.status_code
+        page.encoding='gbk'
+        page=page.text.strip()
+        soup=BeautifulSoup(page,'html5lib')
+        #得到招聘信息
         soup=soup.find_all('div',attrs={'class':'el'})
         for data in soup:
             title=None
@@ -46,7 +78,6 @@ class html_parser(object):
             data4 = data.find('span', attrs={'class': 't5'})
             if data4 is not None and len(data2) != 0:
                 date = data4.string
-
             if title is not None and name is not None:
                 sql='insert into 51job (title,name,address,money,date) values ("%s","%s","%s","%s","%s")'%(title,name,address,money,date)
                 self.cur.insert(sql)
