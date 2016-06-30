@@ -15,8 +15,8 @@ http://api.fanyi.baidu.com/api/trans/vip/translate?q=apple&from=en&to=zh&appid=2
 class get_url(object):
     def __init__(self):
         self.word = get_word.get_word()
-        self.appid = '20160628000024166'
-        self.key = 'hEdErWqx5zjTVwoixr3G'
+        self.appid = 'your appid'
+        self.key = 'your key'
         self.url = 'http://api.fanyi.baidu.com/api/trans/vip/translate'
         self.q = self.word.getword()
 
